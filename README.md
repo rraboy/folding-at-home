@@ -7,3 +7,9 @@ docker run --rm -it -p7396:7396 johnktims/folding-at-home:latest \
 ```
 
 The web console is available on port `7396`.
+
+### Kube
+```bash
+kubectl apply -f kube.yml
+xdg-open "http://$(kubectl get svc folding-at-home -o json | jq -r '.status.loadBalancer.ingress[0].ip')/"
+```

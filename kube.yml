@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: folding-at-home
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 7396
+  selector:
+    run: folding-at-home
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: folding-at-home
+  name: folding-at-home
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: folding-at-home
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: folding-at-home
+    spec:
+      containers:
+        - image: rraboy/folding-at-home:latest
+          imagePullPolicy: Always
+          name: folding-at-home
+          ports:
+          - containerPort: 7396
+            protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+            requests:
+              cpu: "0.5"
